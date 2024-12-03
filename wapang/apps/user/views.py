@@ -1,10 +1,13 @@
 from fastapi import APIRouter, Depends, HTTPException
-from wapang.apps.user.schemas import UserCreateRequest, UserCreateResponse
+from typing import Annotated
+from wapang.apps.user.dto import UserCreateRequest, UserCreateResponse
+from wapang.apps.user.service import UserService
 
 router = APIRouter(prefix='/user', tags=['user'])
 
-@router.get('/signup')
+@router.post('/signup')
 def create_user(
     request: UserCreateRequest,
+    user_service: Annotated[UserService, Depends()]
 ) -> UserCreateResponse:
-    return {"text": "Hello World!"}
+    return user_service.create_user(request)
